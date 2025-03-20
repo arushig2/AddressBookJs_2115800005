@@ -164,6 +164,14 @@ class AddressBook {
     }
   }
 
+  getContactCount() {
+    return this.contacts.reduce((count) => count + 1, 0);
+  }
+
+  displayContactCount() {
+    console.log(`Total Contacts: ${this.getContactCount()}`);
+  }
+
   displayContacts() {
     if (this.contacts.length === 0) {
       console.log("Address Book is empty.");
@@ -207,6 +215,8 @@ try {
 
   addressBook.displayContacts();
 
+  addressBook.displayContactCount(); 
+  
   console.log("\nEditing John's address...");
   addressBook.editContact("John", "address", "4321 Pine St");
 
@@ -221,6 +231,9 @@ try {
 
   // Display updated contacts
   addressBook.displayContacts();
+
+  addressBook.displayContactCount(); 
+
 } catch (error) {
   console.error("Error:", error.message);
 }
