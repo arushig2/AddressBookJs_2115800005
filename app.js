@@ -109,12 +109,16 @@ class AddressBook {
   addContact(contact) {
     if (contact instanceof Contact) {
       // Check for duplicate entry using filter()
-      const isDuplicate = this.contacts.filter(
-        (c) => c.firstName === contact.firstName && c.lastName === contact.lastName
-      ).length > 0;
+      const isDuplicate =
+        this.contacts.filter(
+          (c) =>
+            c.firstName === contact.firstName && c.lastName === contact.lastName
+        ).length > 0;
 
       if (isDuplicate) {
-        console.log("Duplicate contact! This person already exists in the Address Book.");
+        console.log(
+          "Duplicate contact! This person already exists in the Address Book."
+        );
       } else {
         this.contacts.push(contact);
         console.log("Contact added successfully!");
@@ -181,6 +185,32 @@ class AddressBook {
     console.log(`Total Contacts: ${this.getContactCount()}`);
   }
 
+  searchByCity(city) {
+    const contactsInCity = this.contacts.filter(
+      (contact) => contact.city === city
+    );
+
+    if (contactsInCity.length > 0) {
+      console.log(`\nContacts in ${city}:`);
+      contactsInCity.map((contact) => console.log(contact.displayContact()));
+    } else {
+      console.log(`No contacts found in ${city}.`);
+    }
+  }
+
+  searchByState(state) {
+    const contactsInState = this.contacts.filter(
+      (contact) => contact.state === state
+    );
+
+    if (contactsInState.length > 0) {
+      console.log(`\nContacts in ${state}:`);
+      contactsInState.map((contact) => console.log(contact.displayContact()));
+    } else {
+      console.log(`No contacts found in ${state}.`);
+    }
+  }
+
   displayContacts() {
     if (this.contacts.length === 0) {
       console.log("Address Book is empty.");
@@ -220,25 +250,28 @@ try {
   );
 
   const contact3 = new Contact(
-    "John",
-    "Doe",
-    "9999 Pine St",
-    "Houston",
+    "Bob",
+    "Brown",
+    "7777 Maple Ave",
+    "New York",
     "Texas",
-    "770001",
-    "+1-9998887776",
-    "john.duplicate@example.com"
+    "700001",
+    "+1-9999999999",
+    "bob.brown@example.com"
   );
-  
-  addressBook.addContact(contact1); 
-  addressBook.addContact(contact2); 
-  addressBook.addContact(contact3); 
-  
+
+  addressBook.addContact(contact1);
+  addressBook.addContact(contact2);
+  addressBook.addContact(contact3);
 
   addressBook.displayContacts();
 
-  addressBook.displayContactCount(); 
-  
+  addressBook.displayContactCount();
+
+  addressBook.searchByCity("New York");
+
+  addressBook.searchByState("Texas");
+
   console.log("\nEditing John's address...");
   addressBook.editContact("John", "address", "4321 Pine St");
 
@@ -251,11 +284,9 @@ try {
   console.log("\nDeleting John...");
   addressBook.deleteContact("John");
 
-  
   addressBook.displayContacts();
 
-  addressBook.displayContactCount(); 
-
+  addressBook.displayContactCount();
 } catch (error) {
   console.error("Error:", error.message);
 }
