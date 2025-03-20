@@ -34,7 +34,7 @@ class Contact {
   }
 
   validatePhone(phone) {
-    const phoneRegex = /^[+]?[0-9]{1,4}[-\s]?[0-9]{10}$/; 
+    const phoneRegex = /^[+]?[0-9]{1,4}[-\s]?[0-9]{10}$/;
     if (!phoneRegex.test(phone)) {
       throw new Error("Phone number must be a valid 10-digit number with an optional country code.");
     }
@@ -47,6 +47,42 @@ class Contact {
       throw new Error("Invalid email format.");
     }
     return email;
+  }
+
+  updateDetails(field, newValue) {
+    try {
+      switch (field) {
+        case "firstName":
+          this.firstName = this.validateName(newValue, "First Name");
+          break;
+        case "lastName":
+          this.lastName = this.validateName(newValue, "Last Name");
+          break;
+        case "address":
+          this.address = this.validateAddress(newValue, "Address");
+          break;
+        case "city":
+          this.city = this.validateAddress(newValue, "City");
+          break;
+        case "state":
+          this.state = this.validateAddress(newValue, "State");
+          break;
+        case "zip":
+          this.zip = this.validateZip(newValue);
+          break;
+        case "phone":
+          this.phone = this.validatePhone(newValue);
+          break;
+        case "email":
+          this.email = this.validateEmail(newValue);
+          break;
+        default:
+          throw new Error("Invalid field name.");
+      }
+      console.log(`${field} updated successfully!`);
+    } catch (error) {
+      console.error("Error updating contact:", error.message);
+    }
   }
 
   displayContact() {
@@ -73,6 +109,39 @@ class AddressBook {
     }
   }
 
+  findContact(name) {
+    return this.contacts.find(
+      (contact) => contact.firstName === name || contact.lastName === name
+    );
+  }
+
+  editContact(name, field, newValue) {
+    const contact = this.findContact(name);
+    if (contact) {
+      contact.updateDetails(field, newValue);
+    } else {
+      console.log("Contact not found.");
+    }
+  }
+
+  findAndEditContact(name, updatedDetails) {
+    const contact = this.findContact(name);
+    if (contact) {
+      try {
+        for (const key in updatedDetails) {
+          if (contact.hasOwnProperty(key)) {
+            contact.updateDetails(key, updatedDetails[key]); 
+          }
+        }
+        console.log("Contact updated successfully:", contact.displayContact());
+      } catch (error) {
+        console.error("Error updating contact:", error.message);
+      }
+    } else {
+      console.error("Contact not found.");
+    }
+  }
+
   displayContacts() {
     if (this.contacts.length === 0) {
       console.log("Address Book is empty.");
@@ -94,7 +163,7 @@ try {
     "Doe",
     "1234 Elm St",
     "New York",
-    "Texas", 
+    "Texas",
     "100001",
     "+1-9876543210",
     "john.doe@example.com"
@@ -113,6 +182,18 @@ try {
 
   addressBook.addContact(contact1);
   addressBook.addContact(contact2);
+
+  addressBook.displayContacts();
+
+  console.log("\nEditing John's address...");
+  addressBook.editContact("John", "address", "4321 Pine St");
+
+  console.log("\nEditing Alice's details...");
+  addressBook.findAndEditContact("Alice", {
+    phone: "+1-9998887776",
+    email: "alice.new@example.com"
+  });
+
   addressBook.displayContacts();
 } catch (error) {
   console.error("Error:", error.message);
