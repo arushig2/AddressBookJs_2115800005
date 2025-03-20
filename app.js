@@ -108,7 +108,6 @@ class AddressBook {
 
   addContact(contact) {
     if (contact instanceof Contact) {
-      // Check for duplicate entry using filter()
       const isDuplicate =
         this.contacts.filter(
           (c) =>
@@ -211,6 +210,32 @@ class AddressBook {
     }
   }
 
+  viewPersonsByCity(city) {
+    const contactsInCity = this.contacts.filter(
+      (contact) => contact.city === city
+    );
+
+    if (contactsInCity.length > 0) {
+      console.log(`\nPersons in ${city}:`);
+      contactsInCity.map((contact) => console.log(contact.displayContact()));
+    } else {
+      console.log(`No persons found in ${city}.`);
+    }
+  }
+
+  viewPersonsByState(state) {
+    const contactsInState = this.contacts.filter(
+      (contact) => contact.state === state
+    );
+
+    if (contactsInState.length > 0) {
+      console.log(`\nPersons in ${state}:`);
+      contactsInState.map((contact) => console.log(contact.displayContact()));
+    } else {
+      console.log(`No persons found in ${state}.`);
+    }
+  }
+
   displayContacts() {
     if (this.contacts.length === 0) {
       console.log("Address Book is empty.");
@@ -268,25 +293,9 @@ try {
 
   addressBook.displayContactCount();
 
-  addressBook.searchByCity("New York");
+  addressBook.viewPersonsByCity("New York");
 
-  addressBook.searchByState("Texas");
-
-  console.log("\nEditing John's address...");
-  addressBook.editContact("John", "address", "4321 Pine St");
-
-  console.log("\nEditing Alice's details...");
-  addressBook.findAndEditContact("Alice", {
-    phone: "+1-9998887776",
-    email: "alice.new@example.com",
-  });
-
-  console.log("\nDeleting John...");
-  addressBook.deleteContact("John");
-
-  addressBook.displayContacts();
-
-  addressBook.displayContactCount();
+  addressBook.viewPersonsByState("Texas");
 } catch (error) {
   console.error("Error:", error.message);
 }
