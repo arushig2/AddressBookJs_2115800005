@@ -26,7 +26,7 @@ class Contact {
   }
 
   validateZip(zip) {
-    const zipRegex = /^[1-9][0-9]{5}$/; 
+    const zipRegex = /^[1-9][0-9]{5}$/;
     if (!zipRegex.test(zip)) {
       throw new Error("Zip code must be a 6-digit number, not starting with 0.");
     }
@@ -34,7 +34,7 @@ class Contact {
   }
 
   validatePhone(phone) {
-    const phoneRegex = /^[+]?[0-9]{1,4}[-\s]?[0-9]{10}$/;
+    const phoneRegex = /^[+]?[0-9]{1,4}[-\s]?[0-9]{10}$/; 
     if (!phoneRegex.test(phone)) {
       throw new Error("Phone number must be a valid 10-digit number with an optional country code.");
     }
@@ -59,32 +59,61 @@ class Contact {
   }
 }
 
+class AddressBook {
+  constructor() {
+    this.contacts = [];
+  }
+
+  addContact(contact) {
+    if (contact instanceof Contact) {
+      this.contacts.push(contact);
+      console.log("Contact added successfully!");
+    } else {
+      throw new Error("Invalid contact object.");
+    }
+  }
+
+  displayContacts() {
+    if (this.contacts.length === 0) {
+      console.log("Address Book is empty.");
+    } else {
+      console.log("\nAddress Book Contacts:");
+      this.contacts.forEach((contact, index) => {
+        console.log(`\nContact ${index + 1}:`);
+        console.log(contact.displayContact());
+      });
+    }
+  }
+}
+
 try {
-  const contact = new Contact(
+  const addressBook = new AddressBook();
+
+  const contact1 = new Contact(
     "John",
     "Doe",
     "1234 Elm St",
     "New York",
-    "New York",
+    "Texas", 
     "100001",
     "+1-9876543210",
     "john.doe@example.com"
   );
-  console.log(contact.displayContact());
-} catch (error) {
-  console.error("Error:", error.message);
-}
-try {
-  const invalidContact = new Contact(
-    "jo", // Invalid: Less than 3 chars & lowercase
-    "doe", // Invalid: Lowercase
-    "NY", // Invalid: Less than 4 chars
-    "LA", // Invalid: Less than 4 chars
-    "CA", // Invalid: Less than 4 chars
-    "01234", // Invalid: Zip starts with 0
-    "12345", // Invalid: Not a 10-digit phone
-    "john.doe@com" // Invalid: Incorrect email format
+
+  const contact2 = new Contact(
+    "Alice",
+    "Smith",
+    "5678 Oak St",
+    "Los Angeles",
+    "California",
+    "900123",
+    "+1-8765432109",
+    "alice.smith@example.com"
   );
+
+  addressBook.addContact(contact1);
+  addressBook.addContact(contact2);
+  addressBook.displayContacts();
 } catch (error) {
   console.error("Error:", error.message);
 }
