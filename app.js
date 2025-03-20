@@ -13,7 +13,9 @@ class Contact {
   validateName(name, fieldName) {
     const nameRegex = /^[A-Z][a-zA-Z]{2,}$/;
     if (!nameRegex.test(name)) {
-      throw new Error(`${fieldName} must start with a capital letter and have at least 3 characters.`);
+      throw new Error(
+        `${fieldName} must start with a capital letter and have at least 3 characters.`
+      );
     }
     return name;
   }
@@ -28,7 +30,9 @@ class Contact {
   validateZip(zip) {
     const zipRegex = /^[1-9][0-9]{5}$/;
     if (!zipRegex.test(zip)) {
-      throw new Error("Zip code must be a 6-digit number, not starting with 0.");
+      throw new Error(
+        "Zip code must be a 6-digit number, not starting with 0."
+      );
     }
     return zip;
   }
@@ -36,7 +40,9 @@ class Contact {
   validatePhone(phone) {
     const phoneRegex = /^[+]?[0-9]{1,4}[-\s]?[0-9]{10}$/;
     if (!phoneRegex.test(phone)) {
-      throw new Error("Phone number must be a valid 10-digit number with an optional country code.");
+      throw new Error(
+        "Phone number must be a valid 10-digit number with an optional country code."
+      );
     }
     return phone;
   }
@@ -130,7 +136,7 @@ class AddressBook {
       try {
         for (const key in updatedDetails) {
           if (contact.hasOwnProperty(key)) {
-            contact.updateDetails(key, updatedDetails[key]); 
+            contact.updateDetails(key, updatedDetails[key]);
           }
         }
         console.log("Contact updated successfully:", contact.displayContact());
@@ -139,6 +145,22 @@ class AddressBook {
       }
     } else {
       console.error("Contact not found.");
+    }
+  }
+
+  deleteContact(name) {
+    const index = this.contacts.findIndex(
+      (contact) => contact.firstName === name || contact.lastName === name
+    );
+
+    if (index !== -1) {
+      const removedContact = this.contacts.splice(index, 1);
+      console.log(
+        "Contact deleted successfully:",
+        removedContact[0].displayContact()
+      );
+    } else {
+      console.log("Contact not found.");
     }
   }
 
@@ -191,9 +213,13 @@ try {
   console.log("\nEditing Alice's details...");
   addressBook.findAndEditContact("Alice", {
     phone: "+1-9998887776",
-    email: "alice.new@example.com"
+    email: "alice.new@example.com",
   });
 
+  console.log("\nDeleting John...");
+  addressBook.deleteContact("John");
+
+  // Display updated contacts
   addressBook.displayContacts();
 } catch (error) {
   console.error("Error:", error.message);
