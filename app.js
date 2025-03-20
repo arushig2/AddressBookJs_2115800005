@@ -108,8 +108,17 @@ class AddressBook {
 
   addContact(contact) {
     if (contact instanceof Contact) {
-      this.contacts.push(contact);
-      console.log("Contact added successfully!");
+      // Check for duplicate entry using filter()
+      const isDuplicate = this.contacts.filter(
+        (c) => c.firstName === contact.firstName && c.lastName === contact.lastName
+      ).length > 0;
+
+      if (isDuplicate) {
+        console.log("Duplicate contact! This person already exists in the Address Book.");
+      } else {
+        this.contacts.push(contact);
+        console.log("Contact added successfully!");
+      }
     } else {
       throw new Error("Invalid contact object.");
     }
@@ -210,8 +219,21 @@ try {
     "alice.smith@example.com"
   );
 
-  addressBook.addContact(contact1);
-  addressBook.addContact(contact2);
+  const contact3 = new Contact(
+    "John",
+    "Doe",
+    "9999 Pine St",
+    "Houston",
+    "Texas",
+    "770001",
+    "+1-9998887776",
+    "john.duplicate@example.com"
+  );
+  
+  addressBook.addContact(contact1); 
+  addressBook.addContact(contact2); 
+  addressBook.addContact(contact3); 
+  
 
   addressBook.displayContacts();
 
@@ -229,7 +251,7 @@ try {
   console.log("\nDeleting John...");
   addressBook.deleteContact("John");
 
-  // Display updated contacts
+  
   addressBook.displayContacts();
 
   addressBook.displayContactCount(); 
