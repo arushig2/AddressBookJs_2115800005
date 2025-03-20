@@ -236,6 +236,38 @@ class AddressBook {
     }
   }
 
+  viewAllPersonsByCity() {
+    const groupedByCity = this.contacts.reduce((acc, contact) => {
+      acc[contact.city] = acc[contact.city] || [];
+      acc[contact.city].push(`${contact.firstName} ${contact.lastName}`);
+      return acc;
+    }, {});
+
+    console.log("\nPersons grouped by City:", groupedByCity);
+  }
+
+  viewAllPersonsByState() {
+    const groupedByState = this.contacts.reduce((acc, contact) => {
+      acc[contact.state] = acc[contact.state] || [];
+      acc[contact.state].push(`${contact.firstName} ${contact.lastName}`);
+      return acc;
+    }, {});
+
+    console.log("\nPersons grouped by State:", groupedByState);
+  }
+
+  countContactsByCity(city) {
+    const contactsInCity = this.contacts.filter((contact) => contact.city === city);
+    console.log(`\nNumber of contacts in ${city}: ${contactsInCity.length}`);
+    return contactsInCity.length;
+  }
+
+  countContactsByState(state) {
+    const contactsInState = this.contacts.filter((contact) => contact.state === state);
+    console.log(`\nNumber of contacts in ${state}: ${contactsInState.length}`);
+    return contactsInState.length;
+  }
+
   displayContacts() {
     if (this.contacts.length === 0) {
       console.log("Address Book is empty.");
@@ -293,9 +325,9 @@ try {
 
   addressBook.displayContactCount();
 
-  addressBook.viewPersonsByCity("New York");
+  addressBook.countContactsByCity("New York");
 
-  addressBook.viewPersonsByState("Texas");
+  addressBook.countContactsByState("California");
 } catch (error) {
   console.error("Error:", error.message);
 }
